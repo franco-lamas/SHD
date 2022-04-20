@@ -249,6 +249,43 @@ class SHD:
         df.settlement=settlement 
         return df
 
+    def get_short_term_bonds(self,settlement):
+        headers = {
+            "Accept" : "application/json, text/javascript, */*; q=0.01",
+            "Accept-Encoding" : "gzip, deflate",
+            "Accept-Language" : "en-US,en;q=0.5",
+            "Connection" : "keep-alive",    
+            "Content-Type" : "application/json; charset=utf-8",
+            "DNT" : "1",    
+            "Host" : f"{self.__host}",
+            "Origin" : f"https://{self.__host}",
+            "Referer" : f"https://{self.__host}/Prices/Stocks",
+            "Sec-Fetch-Dest" : "empty",
+            "Sec-Fetch-Mode" : "cors",
+            "Sec-Fetch-Site" : "same-origin",
+            "TE" : "trailers",
+            "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+            "X-Requested-With" : "XMLHttpRequest"
+        }
+
+        data = '{"panel":"letes","term":"'+str(self.__settlements_map[settlement])+'"}'
+        response = self.__s.post(url = f"https://{self.__host}/Prices/GetByPanel", headers=headers, data = data)
+        status = response.status_code
+        if status != 200:
+            print("GetByPanel", status)  
+            exit()
+        data = response.json()
+        df = pd.DataFrame(data['Result']['Stocks'])
+        df = pd.DataFrame(data['Result']['Stocks']) if data['Result'] and data['Result']['Stocks'] else pd.DataFrame()
+        df.TradeDate = pd.to_datetime(df.TradeDate, format='%Y%m%d', errors='coerce') + pd.to_timedelta(df.Hour, errors='coerce')
+        df = df[self.__filter_columns].copy()
+        df.columns = self.__securities_columns
+        df = convert_to_numeric_columns(df, self.__numeric_columns)
+        df.group = df.group.apply(lambda x: self.__boards[x] if x in self.__boards else self.__boards[0])
+        df.settlement=settlement 
+        return df
+
+
     def get_corporate_bonds(self,settlement):
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
