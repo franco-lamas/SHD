@@ -8,7 +8,7 @@ Simple Homebroker Data (SHD) es una API para conectar cualquier script de python
 ## Inicialización
 
     from SHD import SHD
-    hb=openBYMAdata()
+    hb=SHD(broker,dni,user,password)
 
 ## Datos de mercados
 | Plazo |Parametro|
@@ -56,7 +56,7 @@ Esta opcion no necesita parametros.
 ### Tenencias
 De momento no obtiene el numero de cuenta de manera automatica por lo que hay que pasarlo como parametro.
 
-    hb.account(*nro comitente*)    
+    hb.account(nro comitente)    
 
 
 ## Brokers Soportados
