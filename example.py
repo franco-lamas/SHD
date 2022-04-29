@@ -11,5 +11,5 @@ hb=SHD(host,dni,user,password)
 
 print(hb.get_bluechips("48hs"))#Parametros: 48hs,24hs,spot
 print(hb.get_MERVAL())#Sin paramentros, trae los indices BYMA
-print(hb.account(comitente=))#Trae la tenencia
+print(hb.account(comitente))#Trae la tenencia
 
