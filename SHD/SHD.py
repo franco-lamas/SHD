@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 from setuptools import setup, find_packages
 
-from common import brokers, BrokerNotSupportedException,convert_to_numeric_columns
+from .common import brokers, BrokerNotSupportedException,convert_to_numeric_columns
 
 
 
