@@ -42,11 +42,11 @@ Simple Homebroker Data (SHD) es una API para conectar cualquier script de python
 
 ### Cotizaciones de los índices 
 
-    hb.get_MERVAL("48hs")
+    hb.get_MERVAL()
     
 ### Cotizaciones de opciones
 
-    hb.get_options("48hs")
+    hb.get_options()
 
 ### Cotizaciones de Favoritos
 Esta opcion no necesita parametros.
