@@ -14,4 +14,4 @@
 __version__ = '0.0.1'
 __author__ = 'Franco Lamas, Marcelo Colom, St1tch'
 
-from .SHD import *
+from .SHDA import *

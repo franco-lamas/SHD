@@ -15,7 +15,7 @@ from .common import brokers, BrokerNotSupportedException,convert_to_numeric_colu
 
 
 
-class SHD:
+class SHDA:
     __settlements_int_map = {
         '1': 'spot',
         '2': '24hs',

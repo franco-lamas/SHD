@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 from setuptools import setup, find_packages
-from PyOBD import __version__
+from SHDA import __version__
 import io
 from os import path
 
@@ -30,7 +30,7 @@ with io.open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='SHD',
+    name='SHDA',
     version=__version__,
     description='Home Broker API - Market data downloader',
     long_description=long_description,
