@@ -57,7 +57,7 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     platforms=['any'],
-    keywords='pandas, BYMA, online, historical, downloader, finance',
+    keywords='pandas, BYMA, online, downloader, finance',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples']),
     install_requires=['pandas>=1.0.0', 'numpy>=1.18.1', 'requests>=2.21.0', 'datetime>=4.3', 'pytz>=2021.3','urllib3']
 )

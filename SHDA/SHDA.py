@@ -25,6 +25,11 @@ class SHDA:
     __personal_portfolio_columns = ['symbol', 'settlement', 'bid_size', 'bid', 'ask', 'ask_size', 'last', 'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'datetime', 'expiration', 'strike', 'kind', 'underlying_asset', 'close']
     __empty_personal_portfolio = pd.DataFrame(columns=__personal_portfolio_columns).set_index(__personal_portfolio_index)
 
+    __repos_index = ['symbol', 'settlement']
+    __repos_columns = ['symbol', 'days', 'settlement', 'bid_amount', 'bid_rate', 'ask_rate', 'ask_amount', 'last', 'change', 'open', 'high', 'low', 'previous_close', 'turnover', 'volume', 'operations', 'datetime', 'close']
+    __empty_repos = pd.DataFrame(columns=__repos_columns).set_index(__repos_index)
+
+
     __call_put_map = {
             0: '',
             1: 'CALL',
@@ -480,6 +485,54 @@ class SHDA:
         df.columns = self.__personal_portfolio_columns
         df = convert_to_numeric_columns(df, numeric_columns)
         return df
+    
+    def get_repos(self):
+        headers = {
+            "Accept" : "application/json, text/javascript, */*; q=0.01",
+            "Accept-Encoding" : "gzip, deflate",
+            "Accept-Language" : "en-US,en;q=0.5",
+            "Connection" : "keep-alive",    
+            "Content-Type" : "application/json; charset=utf-8",
+            "DNT" : "1",    
+            "Host" : f"{self.__host}",
+            "Origin" : f"https://{self.__host}",
+            "Referer" : f"https://{self.__host}/Prices/Stocks",
+            "Sec-Fetch-Dest" : "empty",
+            "Sec-Fetch-Mode" : "cors",
+            "Sec-Fetch-Site" : "same-origin",
+            "TE" : "trailers",
+            "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+            "X-Requested-With" : "XMLHttpRequest"
+        }
+
+        data = '{"panel":"cauciones","term":""}'
+        response = self.__s.post(url = f"https://{self.__host}/Prices/GetByPanel",data=data ,headers=headers)
+        status = response.status_code
+
+
+        data = response.json()
+        df = pd.DataFrame(data['Result']['Stocks'])
+
+        if status != 200:
+            print("GetByPanel", status)  
+            exit()
+
+        filter_columns = ['Symbol', 'CantDias', 'Term', 'BuyQuantity', 'BuyPrice', 'SellPrice', 'SellQuantity', 'LastPrice', 'VariationRate', 'StartPrice', 'MaxPrice', 'MinPrice', 'PreviousClose', 'TotalAmountTraded', 'TotalQuantityTraded', 'Trades', 'TradeDate', 'ClosePrice']
+        numeric_columns = ['last', 'open', 'high', 'low', 'volume', 'turnover', 'operations', 'change', 'bid_amount', 'bid_rate', 'ask_rate', 'ask_amount', 'previous_close', 'close']
+
+        if not df.empty:
+            df.TradeDate = pd.to_datetime(df.TradeDate, format='%Y%m%d', errors='coerce') + pd.to_timedelta(df.Hour, errors='coerce')
+
+            df = df[filter_columns].copy()
+            df.columns = self.__repos_columns
+
+            df = convert_to_numeric_columns(df, numeric_columns)
+            df = df.set_index(self.__repos_index)
+        else:
+            df = self.__empty_repos.copy()
+
+        return df
+
 
     def __get_broker_data(self, broker_id):
 

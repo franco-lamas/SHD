@@ -1,0 +1,5 @@
+SHD.egg-info/
+build/
+.devcontainer/
+bluechips.json
+testing.py
