@@ -6,12 +6,12 @@ GoodLuck and may the force be with you.
 from os import path
 import re
 import json
+import datetime
 import requests
-import pandas as pd
 import numpy as np
-from setuptools import setup, find_packages
-
-from .common import brokers, BrokerNotSupportedException,convert_to_numeric_columns
+import pandas as pd
+from pyquery import PyQuery as pq
+from .common import brokers, BrokerNotSupportedException,convert_to_numeric_columns, SessionException
 
 
 
@@ -54,6 +54,7 @@ class SHDA:
     def __init__(self,broker,dni,user,password):
         self.__s = requests.session()
         self.__host = self.__get_broker_data(broker)['page']
+        self.__is_user_logged_in = False
 
         headers = {
             "Host" : f"{self.__host}",
@@ -74,8 +75,9 @@ class SHDA:
         response = self.__s.get(url = f"https://{self.__host}", headers=headers)
         status = response.status_code
         if status != 200:
-          print("login status", status)  
+          print("Server Down", status)  
           exit()
+
         headers = {
             "Host" : f"{self.__host}",
             "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
@@ -102,15 +104,30 @@ class SHDA:
             "Password": password
         }  
 
-        response = self.__s.post(url = f"https://{self.__host}/Login/IngresarModal", headers=headers, data = data, allow_redirects=False)
-        status = response.status_code
+        try:
+            response = self.__s.post(url = f"https://{self.__host}/Login/Ingresar", headers=headers, data = data, allow_redirects=True)
 
-        if status != 302:
-            print("login status", status)  
+            response.raise_for_status()
+
+            doc = pq(response.text)
+            if not doc('#usuarioLogueado'):
+                print("Check login credentials")
+                errormsg = doc('.callout-danger')
+                if errormsg:
+                    raise SessionException(errormsg.text())
+
+                raise SessionException('Session cannot be created.  Check the entered information and try again.')
+
+            print("Connected!")
+            self.__is_user_logged_in = True
+        except Exception as ex:
+            self.__is_user_logged_in = False
             exit()
-        print("Connected!")
 
     def get_bluechips(self,settlement):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -147,6 +164,9 @@ class SHDA:
         return df
 
     def get_galpones(self,settlement):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -183,6 +203,9 @@ class SHDA:
         return df
 
     def get_cedear(self,settlement):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -219,6 +242,9 @@ class SHDA:
         return df
 
     def get_bonds(self,settlement):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -255,6 +281,9 @@ class SHDA:
         return df
 
     def get_short_term_bonds(self,settlement):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -290,8 +319,10 @@ class SHDA:
         df.settlement=settlement 
         return df
 
-
     def get_corporate_bonds(self,settlement):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -328,6 +359,10 @@ class SHDA:
         return df
 
     def account(self,comitente):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
+
         payload = {'comitente': str(comitente),
             'consolida': '0',
             'proceso': '22',
@@ -352,6 +387,9 @@ class SHDA:
         return df2
 
     def get_options(self):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -404,6 +442,9 @@ class SHDA:
         return df
 
     def get_MERVAL(self):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -437,6 +478,9 @@ class SHDA:
         return df
 
     def get_personal_portfolio(self):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -487,6 +531,9 @@ class SHDA:
         return df
     
     def get_repos(self):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
         headers = {
             "Accept" : "application/json, text/javascript, */*; q=0.01",
             "Accept-Encoding" : "gzip, deflate",
@@ -532,8 +579,46 @@ class SHDA:
             df = self.__empty_repos.copy()
 
         return df
+    
+    def get_daily_history(self, symbol, from_date, to_date):
+        if not self.__is_user_logged_in:
+            print('You must be logged first')
+            exit()
 
+        headers = {
+            'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+            'Accept-Encoding': 'gzip, deflate',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
 
+        url = 'https://{}/HistoricoPrecios/history?symbol={}&resolution=D&from={}&to={}'.format(
+            self.__host,
+            symbol.upper(),
+            self.__convert_datetime_to_epoch(from_date),
+            self.__convert_datetime_to_epoch(to_date))
+
+        resp = self.__s.get(url = url ,headers=headers)
+        resp.raise_for_status()
+        resp = resp.json()
+        df = pd.DataFrame({'date': resp['t'], 'open': resp['o'], 'high': resp['h'], 'low': resp['l'], 'close': resp['c'], 'volume': resp['v']})
+        df.date = pd.to_datetime(df.date, unit='s').dt.date
+        df.volume = df.volume.astype(int)
+
+        return df
+    
+
+    #########################
+    #### PRIVATE METHODS ####
+    #########################
+    def __convert_datetime_to_epoch(self, dt):
+
+        if isinstance(dt, str):
+            dt = datetime.datetime.strptime(dt, '%Y-%m-%d')
+
+        dt_zero = datetime.date(1970, 1, 1)
+        time_delta = dt - dt_zero
+        return int(time_delta.total_seconds())
+    
     def __get_broker_data(self, broker_id):
 
         broker_data = [broker for broker in brokers if broker['broker_id'] == broker_id]

@@ -41,6 +41,16 @@ brokers = [
     'page': 'operar.bellbursatil.com'
     },
     {
+    'broker_id': 91,
+    'name': 'RIG Valores S.A.',
+    'page': 'rigvaloresweb.com/'
+    },
+    {
+    'broker_id': 94,
+    'name': 'Soluciones Financieras S.A.',
+    'page': 'sistemag.solfin.com.ar'
+    },
+    {
     'broker_id': 127,
     'name': 'Maestro y Huerres S.A',
     'page': 'operar.maestroyhuerres.com'
@@ -53,12 +63,12 @@ brokers = [
     {
     'broker_id': 163,
     'name': 'Prosecurities S.A.',
-    'page': 'http://operar.psec.com.ar'
+    'page': 'operar.psec.com.ar'
     },
     {
     'broker_id': 186,
     'name': 'Servente y Cia. S.A.',
-    'page': 'http://clientes.serventeycia.com'
+    'page': 'clientes.serventeycia.com'
     },
     {
     'broker_id': 201,
@@ -84,6 +94,10 @@ brokers = [
     'broker_id': 265,
     'name': 'Negocios Financieros y Bursátiles S.A. (Cocos Capital)',
     'page': 'cocoscap.com'
-    }
+    },
+    {
+    'broker_id': 284,
+    'name': 'Veta Capital S.A.',
+    'page': 'cuentas.vetacapital.com.ar'
+    },
 ]
-

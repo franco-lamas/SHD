@@ -35,7 +35,7 @@ setup(
     description='Home Broker API - Market data downloader',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/franco-lamas/SHD',
+    url='https://github.com/franco-lamas/SHDA',
     author='Franco Lamas, Marcelo Colom, St1tch',
     author_email='francomlamas@gmail.com',
     license='GPL V3',
@@ -51,13 +51,12 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
 
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     platforms=['any'],
     keywords='pandas, BYMA, online, downloader, finance',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples']),
-    install_requires=['pandas>=1.0.0', 'numpy>=1.18.1', 'requests>=2.21.0', 'datetime>=4.3', 'pytz>=2021.3','urllib3']
+    install_requires=['pandas>=2.1.4', 'requests>=2.31.0', 'datetime>=4.3', 'pyquery==2.0.0', 'pytz>=2021.3','urllib3>=2.1.0']
 )
