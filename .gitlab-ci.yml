@@ -5,7 +5,7 @@ build-main:
   stage: build
   image: python:3.10
   only:
-    - master
+    - main
   script:
     - cat $PYPIRC > /tmp/.pypirc
     - pip install twine
