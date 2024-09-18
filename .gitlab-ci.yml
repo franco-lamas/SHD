@@ -1,0 +1,26 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+
+build-main:
+  stage: build
+  image: python:3.10
+  only:
+    - master
+  script:
+    - cat $PYPIRC > /tmp/.pypirc
+    - pip install twine
+    - pip install -r requirements.txt
+    - python setup.py  bdist_wheel
+    - python -m twine upload --repository pypi dist/* --config-file /tmp/.pypirc
+
+build-test:
+  stage: build
+  image: python:3.10
+  only:
+    - testing
+  script:
+    - cat $PYPIRC > /tmp/.pypirc
+    - pip install twine
+    - pip install -r requirements.txt
+    - python setup.py  bdist_wheel
+    - python -m twine upload --repository testpypi dist/* --config-file /tmp/.pypirc

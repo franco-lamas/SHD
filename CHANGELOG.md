@@ -2,13 +2,11 @@
 
 ## Changelog
 
-### v0.0.3-rc2
+### v0.0.3
+- Updated requirements.txt
 - Working login exceptions.
 - Added daily history function.
 - Fixed requirements.txt
-
-## v0.0.3-rc1
-
 - Added repos panel
 - Added Gitub workflow to auto build and upload package
 

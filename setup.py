@@ -58,5 +58,4 @@ setup(
     platforms=['any'],
     keywords='pandas, BYMA, online, downloader, finance',
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'examples']),
-    install_requires=['pandas>=2.1.4', 'requests>=2.31.0', 'datetime>=4.3', 'pyquery==2.0.0', 'pytz>=2021.3','urllib3>=2.1.0']
 )
