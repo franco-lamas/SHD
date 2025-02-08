@@ -86,21 +86,20 @@ class Portfolio:
             for subtotal in activo['Subtotal']:
                 # Crear un diccionario con los datos relevantes del activo y su subtotal
                 activo_data = {
-                    'GTOS': activo['GTOS'],
-                    'IMPO': activo['IMPO'],
-                    'ESPE': activo['ESPE'],
-                    'TIPO': activo['TIPO'],
-                    'AMPL': subtotal['AMPL'],
-                    'Subtotal_IMPO': subtotal['IMPO'],
-                    'Subtotal_TESP': subtotal['TESP'],
-                    'Subtotal_GTS': subtotal['GTOS'],
-                    'CANT': subtotal['CANT'],  # El valor de CANT se obtiene una sola vez
+                    'symbol': subtotal['TICK'],
+                    'description': subtotal['AMPL'],
+                    'position_size': subtotal['CANT'],
+                    'position_price': subtotal['CAN0'],
+                    'date_close': subtotal['PCIO'],
+                    'position': subtotal['IMPO'],                    
+                    'PNL': subtotal['GTOS'],
+                    'group': activo['ESPE'],                    
                 }
                 # Agregar los datos procesados del activo a la lista
                 activos.append(activo_data)
 
         # Convertir la lista de activos en un DataFrame de pandas
-        df_activos = pd.DataFrame(activos)
+        activos_df=pd.DataFrame(activos)
 
         # Retornar el DataFrame con los datos procesados
-        return df_activos
+        return activos_df

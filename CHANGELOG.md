@@ -3,6 +3,9 @@
 ## Changelog
 
 ### v0.0.4-rc1
+- Fixed Portfolio by date methods.
+
+### v0.0.4-rc1
 - Updated requirements.
 - Added License.
 - Added Portfolio class.
