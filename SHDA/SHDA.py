@@ -11,6 +11,7 @@ import requests
 import numpy as np
 import pandas as pd
 from pyquery import PyQuery as pq
+from .portfolio import Portfolio
 from .common import brokers, BrokerNotSupportedException,convert_to_numeric_columns, SessionException
 
 
@@ -123,6 +124,9 @@ class SHDA:
         except Exception as ex:
             self.__is_user_logged_in = False
             exit()
+
+        self.get_portfolio= Portfolio(host=self.__host,session=self.__s,headers=headers)
+        
 
     def get_bluechips(self,settlement):
         if not self.__is_user_logged_in:

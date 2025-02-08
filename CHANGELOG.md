@@ -2,6 +2,11 @@
 
 ## Changelog
 
+### v0.0.4-rc1
+- Updated requirements.
+- Added License.
+- Added Portfolio class.
+
 ### v0.0.3
 - Updated requirements.txt
 - Working login exceptions.
