@@ -100,6 +100,7 @@ class Portfolio:
 
         # Convertir la lista de activos en un DataFrame de pandas
         activos_df=pd.DataFrame(activos)
-
+        activos_df.loc[activos_df['group'] == 'Cuenta Corriente', 'position'] = portfolio['Result']['Totales']['Detalle'][0]['IMPO']
+        activos_df.loc[activos_df['group'] == 'Cuenta Corriente', 'description'] = "Liquidez"
         # Retornar el DataFrame con los datos procesados
         return activos_df

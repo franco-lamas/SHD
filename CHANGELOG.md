@@ -2,7 +2,10 @@
 
 ## Changelog
 
-### v0.0.4-rc1
+### v0.0.4-rc3
+- Minor fixes in Portfolio by date.
+
+### v0.0.4-rc2
 - Fixed Portfolio by date methods.
 
 ### v0.0.4-rc1
