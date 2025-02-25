@@ -11,7 +11,7 @@
 # limitations under the License.
 #
 
-__version__ = '0.0.4-rc3'
+__version__ = '0.0.4-rc4'
 __author__ = 'Franco Lamas, Marcelo Colom, St1tch'
 
 from .SHDA import *
